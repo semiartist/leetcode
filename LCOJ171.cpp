@@ -11,7 +11,6 @@ public:
         for(char c:s) {
             result += ((c-'A' + 1)*inc );
             inc/=26;
-            cout << c-'A' +1;
         }
         return result;
     }

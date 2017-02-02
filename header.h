@@ -10,6 +10,7 @@
 #include <unordered_set>
 #include <set>
 #include <map>
+#include <bitset>
 
 // Definition for a binary tree node.
 struct TreeNode {

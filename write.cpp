@@ -4,57 +4,60 @@ using namespace std;
 
 class Solution {
 public:
-    int romanToInt(string s) {
-        vector<int> numbers;
-        for(char c : s) {
-            if (c == 'I') numbers.push_back(1);
-            if (c == 'V') numbers.push_back(5);
-            if (c == 'X') numbers.push_back(10);
-            if (c == 'L') numbers.push_back(50);
-            if (c == 'C') numbers.push_back(100);
-            if (c == 'D') numbers.push_back(500);
-            if (c == 'M') numbers.push_back(1000);
-        }
+    vector<int> findMode(TreeNode* root) {
+        traversTree(root);
+        map<int , int>::iterator it = solver.begin();
+        vector<int> result;
+        int largest = 0;
+        while (it != solver.end()){
+            if (it->second > largest) {
+                result.clear();
+                largest = it->second;
+                result.push_back(it->first);
+            }else if (it->second == largest) result.push_back(it->first);
 
-        int total = 0, stock, sub;
-        sub = numbers[0];
-        stock =sub;
-        if (numbers.size() ==1) return sub;
-        for (size_t i = 1 ; i < numbers.size() ; i++){
-            cout << total << " " << stock << " " << sub<<endl;
-            if(numbers[i] < numbers[i-1]) { // next number is smaller
-                total += stock;
-                sub = numbers[i];
-                stock = numbers[i];
-            }
-            if (numbers[i] == numbers[i-1]){ // next number is equal
-                total += stock;
-                stock = numbers[i];
-                sub = 0;
-            }
-            if (numbers[i] > numbers[i-1]){ // next number is bigger
-                stock = numbers[i] - sub;
-                sub = 0;
-            }
+            it ++;
         }
-
-        total += stock;
-        return total;
+        return result;
     }
+private:
+    void traversTree(TreeNode * root){
+        if(root == nullptr) return;
+        traversTree(root->left);
+        traversTree(root->right);
+        solver[root->val] ++;
+        // cout << "this node value ->" << root->val << endl;
+        return;
+    }
+    map<int, int> solver;
 };
 
 int main(){
     Solution s;
-    vector<int> nums1 = {1};
+    vector<int> nums1 = {0,2,1};
+    vector<int> nums2 = {1,2,3,4,5,6,7,8,9,12,15,1,2,4,9};
     ListNode *node1 = new ListNode(1);
+    TreeNode tnode1(1);
+    TreeNode node2(2);
+    TreeNode node3(3);
+    TreeNode node4(4);
+    TreeNode node5(2);
+    tnode1.left = &node2;
+    tnode1.right = &node3;
+    node2.left = &node4;
+    node2.right = nullptr;
+    node3.left  = &node5;
+    s.findMode(&tnode1);
 
-    // cout<< s.howManyOnes(30);
+    // cout<< s.missingNumber(nums1)<< endl;;
+    // cout << s.addStrings("9" , "99");
     //
     // vector<string> result = s.readBinaryWatch(4);
+
+    // vector<int> result = s.missingNumber(nums1, nums2);
     // for(size_t i = 0 ; i < result.size() ; ++i){
     //     cout << result[i] << endl;
     // }
-    cout << s.romanToInt("DCXXI");
 
     delete node1;
 

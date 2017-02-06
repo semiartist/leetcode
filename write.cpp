@@ -2,52 +2,181 @@
 
 using namespace std;
 
+
+bool func (int i,int j) { return (i>j); }
+
 class Solution {
 public:
-    vector<int> findMode(TreeNode* root) {
-        traversTree(root);
-        map<int , int>::iterator it = solver.begin();
+    vector<int> findDiagonalOrder(vector<vector<int>>& matrix) {
         vector<int> result;
-        int largest = 0;
-        while (it != solver.end()){
-            if (it->second > largest) {
-                result.clear();
-                largest = it->second;
-                result.push_back(it->first);
-            }else if (it->second == largest) result.push_back(it->first);
+        if (matrix.empty() || matrix[0].empty()) return result;
+        int row = matrix.size();
+        int col = matrix[0].size();
+        int i = 0, j = 0 ;
+        result.push_back(matrix[i][j]);
+        bool goingRight = false;
+        bool goingDown = false;
+        bool goingLeft = false;
+        bool goingUp = false;
+        while ( true){
+            bool moved = true;
+            // direction capability
+            bool leftOK = true;
+            bool rightOK = true;
+            bool downOK = true;
+            bool upOK = true;
 
-            it ++;
+            if (j == 0) leftOK = false;
+            if (j == col - 1) rightOK = false;
+            if (i == 0) upOK = false;
+            if (i == row - 1) downOK = false;
+            if (!rightOK && !downOK) break;
+            // define
+            // first step;
+            if (!goingRight && !goingLeft && !goingUp && !goingDown){
+                if (rightOK){
+                    j++;
+                    moved =false;
+                    goingRight = true;
+                    downOK = true;
+                }else if (downOK){
+                    goingDown = true;
+                    i++;
+                    moved = false;
+                }
+                else break;
+            }
+
+            // right ok?
+            if (goingRight && moved){
+                if (goingUp){
+                    if(rightOK && upOK) {
+                        j++;
+                        i--;
+                        moved = false;
+                    }else if (!upOK && rightOK){
+                        j++;
+                        moved = false;
+                        goingUp = false;
+                    }else{
+                        i++;
+                        moved =false;
+                        goingUp = false;
+                        goingRight = false;
+                        goingDown = true;
+                    } // keep moing up right;
+                }else { // just horizontal move
+                    // move down left ;
+                    if(downOK && leftOK){
+                        i++;
+                        j--;
+                        goingRight = false;
+                        goingDown = true;
+                        goingLeft = true;
+                        moved = false;
+                    } else if(!leftOK && downOK){
+                        i++;
+                        goingRight = false;
+                        goingDown = true;
+                        moved = true;
+                    }else if (rightOK && upOK){
+                        i--;
+                        j++;
+                        // goingRight = true;
+                        goingUp = true;
+                        moved = false;
+                    }
+                    else if (rightOK){
+                        j++;
+                        moved = false;
+                    }
+                }
+            }
+
+            if (goingLeft && moved){
+                if (goingDown){
+                    if(downOK){
+                        if (leftOK){ // ok keep moving
+                            i++;
+                            j--;
+                            moved = false;
+                        }else { // left boundery
+                            goingLeft = false;
+                            i++;
+                            moved = false;
+                        }
+                    }else{
+                        if (leftOK && !downOK){ // move right
+                            goingDown = false;
+                            goingLeft = false;
+                            goingRight = true;
+                            j++;
+                            moved = false;
+
+                        }
+                        if(!leftOK && !downOK){ // right
+                            goingLeft = false;
+                            goingDown = false;
+                            goingRight = true;
+                            j++;
+                            moved = false;
+                        }
+                    }
+                }
+            }
+
+            if (goingDown && moved &&  !goingLeft){
+                // going down only
+                // then go to up right
+                if (rightOK){ // go right up
+                    i--;
+                    j++;
+                    goingDown = false;
+                    goingUp = true;
+                    goingRight = true;
+                    moved = false;
+                }else if (leftOK){  // gp left down
+                    i++;
+                    j--;
+                    goingLeft = true;
+                    moved = false;
+                } else if (downOK){
+                    i++;
+                    moved = false;
+                }
+
+            }
+
+            if (!moved){
+                result.push_back(matrix[i][j]);
+                // cout << matrix[i][j] << endl;
+                // cout << "some error i -> " << i << " j-> " << j << endl;
+            }else{
+                // cout << "some error i -> " << i << " j-> " << j << endl;
+                // cout << "up down right left ok?>" << upOK << downOK << leftOK << rightOK << endl;
+                break;
+            }
         }
         return result;
     }
-private:
-    void traversTree(TreeNode * root){
-        if(root == nullptr) return;
-        traversTree(root->left);
-        traversTree(root->right);
-        solver[root->val] ++;
-        // cout << "this node value ->" << root->val << endl;
-        return;
-    }
-    map<int, int> solver;
 };
-
 int main(){
     Solution s;
-    vector<int> nums1 = {0,2,1};
-    vector<int> nums2 = {1,2,3,4,5,6,7,8,9,12,15,1,2,4,9};
+    vector< vector<int> > nums1 = {};
+    vector<int> nums2 = {1,1,2};
     ListNode *node1 = new ListNode(1);
-    TreeNode tnode1(1);
+    TreeNode tnode1(5);
     TreeNode node2(2);
-    TreeNode node3(3);
-    TreeNode node4(4);
-    TreeNode node5(2);
+    TreeNode node3(-3);
+    // TreeNode node4(4);
+    // TreeNode node5(2);
     tnode1.left = &node2;
     tnode1.right = &node3;
-    node2.left = &node4;
-    node2.right = nullptr;
-    node3.left  = &node5;
-    s.findMode(&tnode1);
+    // node2.left = &node4;
+    // node2.right = nullptr;
+    // node3.left  = &node5;
+    s.findDiagonalOrder(nums1);
+
 
     // cout<< s.missingNumber(nums1)<< endl;;
     // cout << s.addStrings("9" , "99");

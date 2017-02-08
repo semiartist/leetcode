@@ -23,8 +23,6 @@ int main(){
     vector<int> nums = {-2,-1};
     vector<int> newNums(25,1);
     TreeNode node1(1);
-    TreeNode node2(2);
-    TreeNode node3(3);
     node1.left = &node2;
     node2.left = &node3;
     cout << s.pathSum(&node1, 3) << endl;

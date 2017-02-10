@@ -4,8 +4,19 @@ using namespace std;
 
 class Solution {
 public:
-    vector<string> binaryTreePaths(TreeNode* root) {
-
+    bool hasCycle(ListNode *head) {
+        ListNode * slow = head;
+        ListNode * fast = head;
+        int i = 0;
+        while ( slow!= nullptr && fast != nullptr && i < 100000){
+            i++;
+            slow = slow -> next;
+            fast = fast -> next;
+            if (fast == nullptr) return false;
+            else fast = fast -> next;
+            if (slow == fast) return true;
+        }
+        return false;
     }
 };
 

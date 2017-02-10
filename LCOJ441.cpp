@@ -4,8 +4,15 @@ using namespace std;
 
 class Solution {
 public:
-    vector<string> binaryTreePaths(TreeNode* root) {
-
+    int arrangeCoins(int n) {
+        if (n ==1) return n;
+        long int i = 1;
+        long int k = 1;
+        while(i <= n){
+            ++k;
+            i += k;
+        }
+        return k-1;
     }
 };
 

@@ -13,6 +13,7 @@
 #include <bitset>
 #include <utility>
 #include <cstdlib>
+#include <stack>
 
 // Definition for a binary tree node.
 struct TreeNode {

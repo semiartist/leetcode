@@ -19,6 +19,8 @@ public:
             if (nums[i] > smallest){
                 for (size_t j = i+1 ; j < num2.size() ; ++j){
                     if (nums[i] > num2[j]) result ++;
+                    //..
+                    //
                 }
             }
         }

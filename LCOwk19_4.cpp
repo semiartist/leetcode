@@ -4,41 +4,28 @@ using namespace std;
 
 class Solution {
 public:
-    vector<string> binaryTreePaths(TreeNode* root) {
-        if (root == nullptr) return  result;
-        isBottom(root);
-
+    int reversePairs(vector<int>& nums) {
+        vector<long long int> num2(nums.size());
+        // vector<long long int> num;
+        int result = 0;
+        if (nums.empty()) return 0;
+        long long int smallest = nums[0];
+        for (size_t i = 0 ; i < nums.size() ; i++){
+            num2[i] = ((long long int)nums[i] * 2);
+            if (num2[i] < smallest) smallest = num2[i];
+        }
+        // cout << "smallest ->" << smallest <<endl;
+        for (size_t i = 0 ; i < nums.size() ; ++i){
+            if (nums[i] > smallest){
+                for (size_t j = i+1 ; j < num2.size() ; ++j){
+                    if (nums[i] > num2[j]) result ++;
+                    //..
+                    //
+                }
+            }
+        }
         return result;
 
-    }
-private:
-    // variables
-    vector<string> result;
-    vector<int> solver;
-    void isBottom(TreeNode * root){
-        // when it is the root nood;
-        if (root == nullptr) return;
-        solver.push_back(root -> val);
-        if (root->left == nullptr && root->right == nullptr) {
-            string current = "";
-            for (size_t i = 0 ; i < solver.size() ; ++i){
-                current += to_string(solver[i]);
-                if (i != solver.size()-1) current += "->";
-            }
-
-            result.push_back(current);
-            return;
-        }
-        // when it's not root
-
-        if (root -> left != nullptr ) {
-            isBottom(root -> left);
-            solver.pop_back();
-        }
-        if (root -> right != nullptr ) {
-            isBottom(root -> right);
-            solver.pop_back();
-        }
     }
 };
 

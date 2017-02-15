@@ -4,21 +4,24 @@ using namespace std;
 
 class Solution {
 public:
-    bool hasPathSum(TreeNode* root, int sum) {
-        if (root == nullptr) return false;
-        return goFind(root, 0 , sum);
-    }
-
-private:
-    bool goFind(TreeNode * root, int currentSum, int target){
-        if (root == nullptr) return false;
-        cout << "currentSum -> " << currentSum  << endl;
-        int newSum = currentSum + root -> val;
-        if (newSum == target){
-            if (root -> left == nullptr || root ->right == nullptr) return true;
-            // else return true;
+    vector<int> findAnagrams(string s, string p) {
+        vector<int> * result = new vector<int>();
+        if (s.size() < p.size()) return *result;
+        vector<int> charlist(26,0);
+        for (char c:p) charlist[c-'a']++;
+        for (size_t i = 0 ; i < s.size() - p.size() +1 ; ++i){
+            vector<int> temp(charlist);
+            bool find = true;
+            for (size_t j = 0 ; j < p.size() ; j++){
+                temp[s[i+j] - 'a']--;
+                if (temp[s[i+j] - 'a']< 0 ) {
+                    find = false;
+                    break;
+                }
+            }
+            if (find) result->push_back(i);
         }
-        return goFind(root->left, currentSum + root -> val , target) || goFind(root-> right, currentSum + root -> val , target);
+        return *result;
     }
 };
 

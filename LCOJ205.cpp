@@ -4,34 +4,26 @@ using namespace std;
 
 class Solution {
 public:
-    int minDepth(TreeNode* root) {
-        if (root == nullptr) return 0;
+    bool isIsomorphic(string s, string t) {
+        vector<int> solver(s.size(),0);
+        unordered_map<int, int> sMap;
+        unordered_map<int, int> tMap;
 
-        return goDeepFind(root, 0);
-    }
-private:
-    int goDeepFind(TreeNode * root, int currentDepth){
-        currentDepth ++;
-        int left = -1, right = -1;
-        if (root -> left == nullptr && root -> right == nullptr){
-            return currentDepth;
+        for (size_t i = 0; i < s.size() ; ++i){
+            if (sMap[s[i] - 'a'] == 0) {
+                sMap[s[i] - 'a'] = i+1;
+                solver[i]++;
+            } else solver[sMap[s[i] - 'a']-1]++;
+            if (tMap[t[i] - 'a'] == 0) {
+                tMap[t[i] - 'a'] = i+1;
+                solver[i]--;
+            } else solver[tMap[t[i] - 'a'] - 1]--;
+            if (solver[tMap[t[i] - 'a'] - 1] < 0) return false;
         }
-        if (root -> left != nullptr) left = goDeepFind(root -> left , currentDepth);
-        if (root -> right != nullptr) right = goDeepFind(root -> right , currentDepth);
-
-        if (left == -1) return right;
-        if (right == -1) return left;
-        return min(left, right);
-    }
-
-    int min(int a, int b){
-        return (a < b ? a : b);
-    }
-
-    int max(int a, int b){
-        return (a>b ? a : b);
+        return true;
     }
 };
+
 /**
 * Your MyQueue object will be instantiated and called as such:
 * MyQueue obj = new MyQueue();
@@ -46,7 +38,7 @@ int main(){
     Solution s;
     vector<int> nums = {1,1,1,2,2,3,4,5,5,6,7,8,8,9,11,12,13,13};
     vector<int> newNums(25,1);
-
+    /*
     // node part test;
     TreeNode node1(3);
     TreeNode node2(1);
@@ -57,16 +49,16 @@ int main(){
     TreeNode node7(6);
     node1.left = &node2;
     node1.right = &node3;
-    // node3.left = &node6;
-    // node3.right = &node7;
-    // node2.left = &node4;
-    // node2.right = &node5;
-
+    node3.left = &node6;
+    node3.right = &node7;
+    node2.left = &node4;
+    node2.right = &node5;
+    */
     //test output
     // 1
     // vector<int> result =s.findAnagrams("aaaaaaaaaaaaaaaaaaaaaa", "a");
     // 2
-    cout << s.minDepth(&node1) << endl;
+    cout << s.isIsomorphic("title", "paper") << endl;
     // cout << 2147483647 * 2 << endl;
     // for (size_t i = 0 ; i < result.size() ; i++){
     //     cout << result[i] << "  ";

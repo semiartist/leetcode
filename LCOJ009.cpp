@@ -4,24 +4,22 @@ using namespace std;
 
 class Solution {
 public:
-    vector<int> findAnagrams(string s, string p) {
-        vector<int> * result = new vector<int>();
-        if (s.size() < p.size()) return *result;
-        vector<int> charlist(26,0);
-        for (char c:p) charlist[c-'a']++;
-        for (size_t i = 0 ; i < s.size() - p.size() +1 ; ++i){
-            vector<int> temp(charlist);
-            bool find = true;
-            for (size_t j = 0 ; j < p.size() ; j++){
-                temp[s[i+j] - 'a']--;
-                if (temp[s[i+j] - 'a']< 0 ) {
-                    find = false;
-                    break;
-                }
-            }
-            if (find) result->push_back(i);
+    bool isPalindrome(int x) {
+        if (x < 0) return false;
+        vector<int> solver;
+        while (x > 0){
+            solver.push_back(x%10);
+            x /= 10;
         }
-        return *result;
+
+        vector<int>::iterator it1 = solver.begin();
+        vector<int>::iterator it2 = solver.end() -1;
+        while (it2 - it1 > 0){
+            if (*it2 != *it1) return false;
+            it1 ++;
+            it2 --;
+        }
+        return true;
     }
 };
 
@@ -58,14 +56,13 @@ int main(){
 
     //test output
     // 1
-    vector<int> result =s.findAnagrams("aaaaaaaaaaaaaaaaaaaaaa", "a");
+    // vector<int> result =s.getRow(3);
     // 2
-    // cout << s.findAnagrams("aaaaaaaaaaaaaaaaaaaaaa", "a");
+    cout << s.isPalindrome(121);
     // cout << 2147483647 * 2 << endl;
-    for (size_t i = 0 ; i < result.size() ; i++){
-        cout << result[i] << "  ";
-    }
-    cout << endl;
+    // for (size_t i = 0 ; i < result.size() ; i++){
+    //     cout << result[i] << "  ";
+    // }
 
     // cout << s.findLeftMostNode(&node1) << endl;
 

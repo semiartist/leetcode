@@ -2,32 +2,38 @@
 
 using namespace std;
 
-
 class Solution {
 public:
-    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
-        int totalSize = nums1.size() + nums2.size();
-        if (totalSize == 1) return nums1.size() ? nums1[0] : nums2[0];
-        vector<int> solver(totalSize/2);
-        int i = 0 , j = 0, k = 0;
-        while (k < totalSize/2){
-            if (i != nums1.size() && j != nums2.size()){
-                if (nums1[i] < nums2[j]) {
-                    solver[k++] = nums1[i++];
-                }else {
-                    solver[k++] = nums2[j++];
-                }
-            }else if (i != nums1.size()){
-                solver[k++] = nums1[i++];
-            }else {
-                solver[k++] = nums2[j++];
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        int number = 0;
+        ListNode * solver = nullptr;
+        ListNode * result = solver;
+        if (l1 != nullptr) {
+            number += l1 -> val;
+            l1 = l1 -> next;
+        }
+        if (l2 != nullptr) {
+            number += l2 -> val;
+            l2 = l2 -> next;
+        }
+        solver = new ListNode(number % 10);
+        while (l1 != nullptr || l2 != nullptr){
+            number = number /10;
+            if (l1 != nullptr) {
+                number += l1 -> val;
+                l1 = l1 -> next;
             }
+            if (l2 != nullptr) {
+                number += l2 -> val;
+                l2 = l2 -> next;
+            }
+            solver->next = new ListNode(number %10);
+            solver = solver ->next;
         }
-        if (totalSize %2 == 1){
-            return (double)solver[totalSize/2];
-        }else{
-            return ( (double)(solver[totalSize/2] + solver[totalSize/2 -1]) / 2);
+        if (number >= 10) {
+            solver -> next = new ListNode(number /10);
         }
+        return result;
     }
 };
 /**
@@ -42,8 +48,8 @@ public:
 
 int main(){
     Solution s;
-    vector<int> nums = {1,2,4,5};
-    vector<int> nums2 = {3,6};
+    vector<int> nums = {1,2,3,4,5};
+    vector<int> newNums(25,1);
 
     // node part test;
     TreeNode node1(3);
@@ -66,7 +72,7 @@ int main(){
     // 1
     // vector<int> result =s.twoSum(nums, 7);
     // 2
-    cout << s.findMedianSortedArrays(nums, nums2) << endl;
+    // cout << s.twoSum(nums, 7) << endl;
     // cout << 2147483647 * 2 << endl;
     // for (size_t i = 0 ; i < result.size() ; i++){
     //     cout << result[i] << "  ";

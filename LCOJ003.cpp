@@ -5,29 +5,38 @@ using namespace std;
 
 class Solution {
 public:
-    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
-        int totalSize = nums1.size() + nums2.size();
-        if (totalSize == 1) return nums1.size() ? nums1[0] : nums2[0];
-        vector<int> solver(totalSize/2);
-        int i = 0 , j = 0, k = 0;
-        while (k < totalSize/2){
-            if (i != nums1.size() && j != nums2.size()){
-                if (nums1[i] < nums2[j]) {
-                    solver[k++] = nums1[i++];
-                }else {
-                    solver[k++] = nums2[j++];
+    int lengthOfLongestSubstring(string s) {
+        // variables
+        int start = 0, end = 0;
+        int fast = 0 , slow = 0;
+        int length = 0;
+        vector<int> solver(256, 0);
+        // solver[s[fast]]++;
+        // algorithm
+        while (fast != s.size()){
+            if (solver[s[fast]] == 0){
+                solver[s[fast]]++;
+                ++fast;
+                ++length;
+            }else{
+                while (slow != fast && solver[s[fast]] == 1 ){
+                    --solver[s[slow]];
+                    ++slow;
+                    --length;
                 }
-            }else if (i != nums1.size()){
-                solver[k++] = nums1[i++];
-            }else {
-                solver[k++] = nums2[j++];
             }
+            if (end - start < length){
+                start = slow;
+                end = fast;
+            }
+            cout << "--> HERE <-- "<< endl;
+            cout << "slow -> " << slow << endl;
+            cout << "fast -> " << fast << endl;
+            cout << "length -> " << length << endl;
+            cout << "begin -> " << start << endl;
+            cout << "end -> " << end << endl;
         }
-        if (totalSize %2 == 1){
-            return (double)solver[totalSize/2];
-        }else{
-            return ( (double)(solver[totalSize/2] + solver[totalSize/2 -1]) / 2);
-        }
+        return end - start ;
     }
 };
 /**
@@ -43,7 +52,7 @@ public:
 int main(){
     Solution s;
     vector<int> nums = {1,2,4,5};
-    vector<int> nums2 = {3,6};
+    vector<int> nums2 = {3};
 
     // node part test;
     TreeNode node1(3);

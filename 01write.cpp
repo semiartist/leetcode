@@ -2,47 +2,77 @@
 
 using namespace std;
 
-
 class Solution {
 public:
-    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
-        int totalSize = nums1.size() + nums2.size();
-        if (totalSize == 1) return nums1.size() ? nums1[0] : nums2[0];
-        vector<int> solver(totalSize/2);
-        int i = 0 , j = 0, k = 0;
-        while (k < totalSize/2){
-            if (i != nums1.size() && j != nums2.size()){
-                if (nums1[i] < nums2[j]) {
-                    solver[k++] = nums1[i++];
-                }else {
-                    solver[k++] = nums2[j++];
-                }
-            }else if (i != nums1.size()){
-                solver[k++] = nums1[i++];
-            }else {
-                solver[k++] = nums2[j++];
+    string convert(string s, int numRows) {
+        if (s.empty()) return s;
+        if (numRows == 1) return s;
+        vector<queue<char> > lines(numRows);
+        int row = -1;
+        bool down = true;
+        for (int i = 0 ; i < s.size() ; ++i){
+            if (down){
+                row++;
+                lines[row].push(s[i]);
+            }else{
+                row--;
+                lines[row].push(s[i]);
+            }
+            if (row == numRows -1) {
+                down = false;
+                // row--;
+            }else if (row == 0){
+                down = true;
+                // row++;
             }
         }
-        if (totalSize %2 == 1){
-            return (double)solver[totalSize/2];
-        }else{
-            return ( (double)(solver[totalSize/2] + solver[totalSize/2 -1]) / 2);
+        string result = "";
+        for (queue<char> s : lines){
+            while (!s.empty()){
+                result += s.front();
+                s.pop();
+            }
         }
+        return result;
+    }
+
+    string convert(string s, int numRows){
+        if (numRows == 1) return s;
+        if (s.empty()) return s;
+        string result(s);
+        int size = 2*numRows -2;
+        vector<int> start(numRows,0);
+
+        for(int i = 1 ; i < numRows ; ++i){
+            if (i == 1) start[i] = start[i-1] + s.size() / size;
+            else start[i] = start[i - 1] + 2 * (s.size() / size);
+        }
+        int left = s.size() % size;
+        for (int j = 1 ; j < left ; ++j){
+            if (j < numRows){
+                for (int i = j ; i < numRows ; ++i) start[i]++;
+            }else{
+                for (int i = size - j + 1 ; i < numRows ; ++i) start[i]++;
+            }
+        }
+
+        int line = 1, loc  = 0;
+        bool down = true;
+        for(int i = 0 ; i < s.size() ; ++i){
+            if (down) line++;
+            else line--;
+            result[start[line]] = s[i];
+            start[line]++;
+            if (line == 0) down = true;
+            if (line == numRows) down = false;
+        }
+        return result;
     }
 };
-/**
-* Your MyQueue object will be instantiated and called as such:
-* MyQueue obj = new MyQueue();
-* obj.push(x);
-* int param_2 = obj.pop();
-* int param_3 = obj.peek();
-* bool param_4 = obj.empty();
-*/
-
 
 int main(){
     Solution s;
-    vector<int> nums = {1,2,4,5};
+    vector<int> nums = {   1,1,1,1,1,1,1,0,0,0,0,1,1,0,1,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,1,0,0,0,0,1,0,1,0,0,0,1,1,0,0,0,0,1,0,0,1,1,1,1,1,0,0,1,0,1,1,0,0,0,1,0,0,0,1,1,1,0,1,1,0,1,0,0,1,1,0,1,0,0,1,1,1,0,0,1,0,1,1,1,0,0,1,0,1,1};
     vector<int> nums2 = {3,6};
 
     // node part test;
@@ -66,7 +96,7 @@ int main(){
     // 1
     // vector<int> result =s.twoSum(nums, 7);
     // 2
-    cout << s.findMedianSortedArrays(nums, nums2) << endl;
+    cout << s.findMaxLength(nums) << endl;
     // cout << 2147483647 * 2 << endl;
     // for (size_t i = 0 ; i < result.size() ; i++){
     //     cout << result[i] << "  ";

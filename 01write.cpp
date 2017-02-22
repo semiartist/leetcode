@@ -4,69 +4,49 @@ using namespace std;
 
 class Solution {
 public:
-    string convert(string s, int numRows) {
-        if (s.empty()) return s;
-        if (numRows == 1) return s;
-        vector<queue<char> > lines(numRows);
-        int row = -1;
-        bool down = true;
-        for (int i = 0 ; i < s.size() ; ++i){
-            if (down){
-                row++;
-                lines[row].push(s[i]);
-            }else{
-                row--;
-                lines[row].push(s[i]);
+    bool isMatch(string s, string p) {
+        bool here = false;
+        bool result = true;
+        int size1 =0, size2 = 0;
+        while(result && size1<s.size() && size2< p.size() ){
+            result = false;
+            char thisS = s[size1], thisP = p[size2];
+            if (s[size1] == p[size2]) {
+                result = true;
             }
-            if (row == numRows -1) {
-                down = false;
-                // row--;
-            }else if (row == 0){
-                down = true;
-                // row++;
-            }
-        }
-        string result = "";
-        for (queue<char> s : lines){
-            while (!s.empty()){
-                result += s.front();
-                s.pop();
-            }
-        }
-        return result;
-    }
+            if (s[size1] == '*' || p[size2] == '*'){
+                // keep search until the first letter which not equals to thisP
+                // and p[i] = s[j];
+                if (s[size1] == '*' && size1 > 0) thisS = s[size1 - 1];
+                if (p[size2] == '*' && size2 > 0) thisP = p[size1 - 1];
+                if (thisS != thisP) return false;
+                bool search = true;
+                while (search && size1 < s.size()){
+                    ++size1;
+                    if (s[size1] != thisS) search = false;
+                }
+                search = true;
+                while (search && size2 < p.size()){
+                    ++size2;
+                    if (p[size2] != thisP) search = false;
+                }
+                continue;
 
-    string convert(string s, int numRows){
-        if (numRows == 1) return s;
-        if (s.empty()) return s;
-        string result(s);
-        int size = 2*numRows -2;
-        vector<int> start(numRows,0);
-
-        for(int i = 1 ; i < numRows ; ++i){
-            if (i == 1) start[i] = start[i-1] + s.size() / size;
-            else start[i] = start[i - 1] + 2 * (s.size() / size);
-        }
-        int left = s.size() % size;
-        for (int j = 1 ; j < left ; ++j){
-            if (j < numRows){
-                for (int i = j ; i < numRows ; ++i) start[i]++;
-            }else{
-                for (int i = size - j + 1 ; i < numRows ; ++i) start[i]++;
+            }
+            if (s[size1] == '.' || p[size2] == '.'){
+                result = true;
+            }
+            if (s[size1] != p[size2]){
+                if ((size1 + 1 < s.size() && s[size1+1] == '*') ||(size2+1 < p.size()&& p[size2 + 1] == '*')){
+                    result = true;
+                    if (size1 + 1 < s.size() && s[size1+1] == '*') size1+=2;
+                    if (size2+1 < p.size()&& p[size2 + 1] == '*') size2 +=2;
+                    continue;
+                }
+                result = false;
             }
         }
-
-        int line = 1, loc  = 0;
-        bool down = true;
-        for(int i = 0 ; i < s.size() ; ++i){
-            if (down) line++;
-            else line--;
-            result[start[line]] = s[i];
-            start[line]++;
-            if (line == 0) down = true;
-            if (line == numRows) down = false;
-        }
-        return result;
+        return here;
     }
 };
 
@@ -96,7 +76,11 @@ int main(){
     // 1
     // vector<int> result =s.twoSum(nums, 7);
     // 2
-    cout << s.findMaxLength(nums) << endl;
+    cout << s.myAtoi("   +1") << endl;
+    // cout << '1' - '0'<<endl;
+    // cout << '4' - '0'<<endl;
+    // cout << '8' - '0'<<endl;
+    // cout << '9' - '0'<<endl;
     // cout << 2147483647 * 2 << endl;
     // for (size_t i = 0 ; i < result.size() ; i++){
     //     cout << result[i] << "  ";

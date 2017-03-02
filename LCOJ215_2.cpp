@@ -4,8 +4,14 @@ using namespace std;
 
 class Solution {
 public:
-    string intToRoman(int num) {
-
+    int findKthLargest(vector<int>& nums, int k) {
+        multiset<int> solver(nums.begin() , nums.end());
+        multiset<int>::iterator it = solver.end();
+        while (k != 0) {
+            it--;
+            --k;
+        }
+        return *it;
     }
 };
 

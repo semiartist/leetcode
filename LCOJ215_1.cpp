@@ -4,8 +4,9 @@ using namespace std;
 
 class Solution {
 public:
-    vector<vector<int>> fourSum(vector<int>& nums, int target) {
-        
+    int findKthLargest(vector<int>& nums, int k) {
+        sort(nums.begin() , nums.end());
+        return nums[nums.size() - k ];
     }
 };
 

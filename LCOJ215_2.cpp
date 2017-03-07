@@ -4,8 +4,14 @@ using namespace std;
 
 class Solution {
 public:
-    vector<vector<int>> fourSum(vector<int>& nums, int target) {
-        
+    int findKthLargest(vector<int>& nums, int k) {
+        multiset<int> solver(nums.begin() , nums.end());
+        multiset<int>::iterator it = solver.end();
+        while (k != 0) {
+            it--;
+            --k;
+        }
+        return *it;
     }
 };
 

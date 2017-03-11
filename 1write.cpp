@@ -16,6 +16,8 @@ public:
             k = 0;
             if ((solver.empty())) continue;
             while (  k != solver.size()){
+
+                
                 if (solver[k] != -1 && needle[solver[k]] == haystack[i]) {
                     solver[k]++;
                     if (solver[k] == needle.size()) break;
